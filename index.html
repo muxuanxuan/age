@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>年龄计算器</title>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #333;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 35px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      text-align: left;
+      color: #555;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="date"]:focus {
+      outline: none;
+      border-color: #3f87f5;
+      box-shadow: 0 0 6px rgba(63, 135, 245, 0.5);
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(270deg, #ff0057, #2dcb73, #00d2ff);
+      background-size: 600% 600%;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      animation: gradientShift 8s ease infinite;
+      transition: box-shadow 0.3s ease;
+      user-select: none;
+    }
+
+    button:hover,
+    button:focus {
+      box-shadow: 0 0 12px rgba(0, 210, 255, 0.7);
+      outline: none;
+    }
+
+    #result {
+      margin-top: 24px;
+      font-size: 18px;
+      font-weight: 500;
+      min-height: 1.5em;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%
+      }
+
+      50% {
+        background-position: 100% 50%
+      }
+
+      100% {
+        background-position: 0% 50%
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 11px 0;
+      }
+
+      #result {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>年龄计算器</h1>
+    <label for="birthdate">出生日期：</label>
+    <input type="date" id="birthdate" max="" value="2023-11-01" />
+    <button onclick="showAge()">计算年龄</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('birthdate').max = new Date().toISOString().split("T")[0];
+
+    function calculateAge(birthDate) {
+      const now = new Date();
+      if (birthDate > now) return null;
+
+      let years = now.getFullYear() - birthDate.getFullYear();
+      let months = now.getMonth() - birthDate.getMonth();
+      let days = now.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months -= 1;
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      return { years, months, days };
+    }
+
+    function showAge() {
+      const input = document.getElementById('birthdate').value;
+      const resultDiv = document.getElementById('result');
+      if (!input) {
+        resultDiv.textContent = "请先选择出生日期。";
+        return;
+      }
+
+      const birthDate = new Date(input);
+      const age = calculateAge(birthDate);
+
+      if (!age) {
+        resultDiv.textContent = "出生日期不能晚于今天。";
+        return;
+      }
+
+      resultDiv.textContent = `年龄：${age.years}岁 ${age.months}月 ${age.days}天`;
+    }  
+  </script>
+</body>
+
+</html>
