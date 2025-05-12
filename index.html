@@ -43,6 +43,29 @@
       color: #555;
     }
 
+    #preset-buttons {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #preset-buttons button {
+      margin: 3px 5px 3px 0;
+      padding: 6px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4a90e2;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #preset-buttons button:hover {
+      background-color: #357abd;
+    }
+
     input[type="date"] {
       width: 100%;
       padding: 8px 10px;
@@ -59,7 +82,7 @@
       box-shadow: 0 0 6px rgba(63, 135, 245, 0.5);
     }
 
-    button {
+    button#calc-btn {
       margin-top: 20px;
       width: 100%;
       padding: 12px 0;
@@ -71,13 +94,13 @@
       border: none;
       border-radius: 7px;
       cursor: pointer;
-      animation: gradientShift 8s ease infinite;
+      animation: gradientShift 5s ease infinite;
       transition: box-shadow 0.3s ease;
       user-select: none;
     }
 
-    button:hover,
-    button:focus {
+    button#calc-btn:hover,
+    button#calc-btn:focus {
       box-shadow: 0 0 12px rgba(0, 210, 255, 0.7);
       outline: none;
     }
@@ -112,13 +135,18 @@
         font-size: 22px;
       }
 
-      button {
+      button#calc-btn {
         font-size: 16px;
         padding: 11px 0;
       }
 
       #result {
         font-size: 16px;
+      }
+
+      #preset-buttons button {
+        font-size: 13px;
+        padding: 5px 10px;
       }
     }
   </style>
@@ -127,14 +155,25 @@
 <body>
   <div class="container">
     <h1>年龄计算器</h1>
-    <label for="birthdate">出生日期：</label>
-    <input type="date" id="birthdate" max="" value="2023-11-01" />
-    <button onclick="showAge()">计算年龄</button>
+    <div id="preset-buttons">
+      <button onclick="fillBirthdate('2023-11-01')">泽安</button>
+      <button onclick="fillBirthdate('2024-02-10')">泽宇</button>
+    </div>
+    <label for="birthdate">请选择出生日期：</label>
+    <input type="date" id="birthdate" max="" />
+    <button id="calc-btn" onclick="showAge()">计算年龄</button>
     <div id="result"></div>
   </div>
 
   <script>
+    // 设置最大日期为今天  
     document.getElementById('birthdate').max = new Date().toISOString().split("T")[0];
+
+    function fillBirthdate(dateStr) {
+      document.getElementById('birthdate').value = dateStr;
+      // 清空结果，方便重新计算  
+      document.getElementById('result').textContent = '';
+    }
 
     function calculateAge(birthDate) {
       const now = new Date();
